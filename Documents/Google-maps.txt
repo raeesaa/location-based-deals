@@ -58,7 +58,7 @@ Click on 'Create New Android Key' button. Enter SHA1 fingerprint, semicolon and 
     />
 	(Suppose this was map.xml)
  
-9. Now extent your Main class with FragmentActivity rather than Activity. Write onCreate as usual.
+9. Now extend your Main class with FragmentActivity rather than Activity. Write onCreate as usual.
 
 	protected void onCreate(Bundle savedInstanceState) 
 	{
