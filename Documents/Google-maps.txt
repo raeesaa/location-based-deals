@@ -1,0 +1,73 @@
+Link : 
+http://mobile.tutsplus.com/tutorials/android/android-sdk-working-with-google-maps-application-setup/
+
+1.Download and install Google Play Services in android sdk manager, if you haven't already.
+
+2.Once Eclipse downloads and installs the Google Play services package, you can import it into your workspace. 
+Right Click project explorer > Import > Android > Existing Android Code into Workspace browse for E:\Softwares\Android\adt-bundle-windows-x86-20130219\sdk\extras\google\google_play_services\libproject\google-play-services_lib.
+
+3. You'll need android app debug or release certificate(in case app is already in play store) for obtaining google map API key. 
+Use following command for obtaining debug certificate(SHA1 fingerprint)
+
+	keytool -list -v -keystore "%HOMEPATH%\.android\debug.keystore" -alias androiddebugkey -storepass android -keypass android
+
+
+4. Now sign in to your google account and navigate to https://code.google.com/apis/console/. If you haven’t used the console before it will prompt you to create a project. Create it.
+The project has default name 'API Project'. You can see it in left top corner. You can rename it by selecting it.
+
+5.The APIs console manages access to many Google services, but you need to switch on each one you want to use individually. Select Services from the list on the left of the APIs console. 
+You should see a list of Google services, scroll down to Google Maps Android API V2 and click to turn it on for your account.	
+
+6.Now we can get a key for the app. Select API Access on the left-hand-side of the API console. You may already see a key for browser apps but we need to create one for android maps.
+Click on 'Create New Android Key' button. Enter SHA1 fingerprint, semicolon and package name as follows-
+
+	SHA1-fingerprint;your.package.name
+
+7.Open the android manifest file and add the following inside application element :
+
+	<meta-data
+	    android:name="com.google.android.maps.v2.API_KEY"
+	    android:value="your_key_here" />
+
+   Add the following in manifest element but outside <application> : 
+	<permission
+	    android:name="your.package.name.permission.MAPS_RECEIVE"
+	    android:protectionLevel="signature" />
+	<uses-permission android:name="your.package.name.permission.MAPS_RECEIVE"/>
+
+   Now add the following permissions : 
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />  
+
+   Finally, we need to add a feature element for OpenGL ES version 2:
+	
+	<uses-feature
+    		android:glEsVersion="0x00020000"
+    		android:required="true"/>
+
+8. Now you can add map to your app. In xml file add :
+	<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/the_map"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:name="com.google.android.gms.maps.MapFragment" (replace this with SupportMapFragment for API level less than 11)
+    map:cameraTilt="45"
+    map:cameraZoom="14"
+    />
+	(Suppose this was map.xml)
+ 
+9. Now extent your Main class with FragmentActivity rather than Activity. Write onCreate as usual.
+
+	protected void onCreate(Bundle savedInstanceState) 
+	{
+	    super.onCreate(savedInstanceState);
+	    setContentView(R.layout.map);
+	}
+
+	
+
+
+
+
